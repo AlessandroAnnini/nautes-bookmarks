@@ -5,6 +5,8 @@ import { supabase } from '@/utils/supabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl } from '@fortawesome/free-solid-svg-icons';
 
+const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
+
 export default function Home({ user }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,7 @@ export default function Home({ user }) {
   return (
     <div>
       <Head>
-        <title>Nautes Bookmarks</title>
+        <title>{websiteName}</title>
       </Head>
 
       <h1 className="text-3xl font-semibold tracking-wide mt-6 mb-2">Posts</h1>

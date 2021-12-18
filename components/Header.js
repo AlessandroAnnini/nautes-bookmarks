@@ -1,10 +1,10 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import Image from 'next/image';
+
+const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
+console.log({ websiteName });
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -56,7 +56,7 @@ export const Header = ({ user }) => {
                     className="flex items-center py-4 px-2">
                     {/* <img src="logo.png" alt="Logo" className="h-8 w-8 mr-2" /> */}
                     <span className="font-semibold tracking-wider text-yellow-500 text-5xl font-heading cursor-pointer">
-                      Nautes Bookmarks
+                      {websiteName}
                     </span>
                   </Link>
                   {/* <img

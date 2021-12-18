@@ -8,10 +8,6 @@ export default function Auth() {
   const handleLogin = async (email) => {
     try {
       setLoading(true);
-      // if (!email.includes('@nautes.com')) {
-      //   alert('Please use your nautes.com email address');
-      //   return;
-      // }
 
       const { error } = await supabase.auth.signIn({ email });
       if (error) throw error;
