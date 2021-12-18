@@ -1,9 +1,17 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from 'react';
+import { supabase } from '@/utils/supabaseClient';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import Image from 'next/image';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faBookmark,
+  faFile,
+  faSignOutAlt,
+} from '@fortawesome/free-solid-svg-icons';
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -16,32 +24,38 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export const Header = () => {
+export const Header = ({ user }) => {
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+  }
+
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure
+      as="nav"
+      className="bg-gradient-to-r from-sky-500 to-indigo-500">
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between h-16">
-              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                {/* Mobile menu button*/}
-                {/* <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+              {/* <div className="absolute inset-y-0 left-0 flex items-center sm:hidden"> */}
+              {/* Mobile menu button*/}
+              {/* <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
                     <MenuIcon className="block h-6 w-6" aria-hidden="true" />
                   )}
-                </Disclosure.Button> */}
-              </div>
-              <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+                </Disclosure.Button>
+              </div> */}
+              <div className="flex-1 flex items-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
                   <Link
                     href="/"
                     passHref
                     className="flex items-center py-4 px-2">
                     {/* <img src="logo.png" alt="Logo" className="h-8 w-8 mr-2" /> */}
-                    <span className="font-semibold text-green-500 text-xl cursor-pointer">
+                    <span className="font-semibold tracking-wider text-yellow-500 text-5xl font-heading cursor-pointer">
                       Nautes Bookmarks
                     </span>
                   </Link>
@@ -83,71 +97,61 @@ export const Header = () => {
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button> */}
 
-                {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
-                  <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <span className="sr-only">Open user menu</span>
-                      <Image
-                        height={38}
-                        width={38}
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95">
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <div className="'block px-4 py-2 text-sm text-gray-700 cursor-pointer'">
-                            <Link
-                              passHref
-                              href="/profile"
-                              className={classNames(
-                                active ? 'bg-gray-100' : ''
-                              )}>
-                              Your Profile
-                            </Link>
-                          </div>
-                        )}
-                      </Menu.Item>
-                      {/* <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700'
-                            )}>
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item> */}
-                      <Menu.Item>
-                        {({ active }) => (
-                          <div className="'block px-4 py-2 text-sm text-gray-700 cursor-pointer'">
-                            <Link
-                              href="#"
-                              className={classNames(
-                                active ? 'bg-gray-100' : ''
-                              )}>
-                              Sign out
-                            </Link>
-                          </div>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                {user && (
+                  <>
+                    <Link href="/create-bookmark" passHref>
+                      <a className="relative inline-flex items-center justify-center inline-block p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 rounded-lg shadow-2xl group">
+                        <span className="absolute top-0 left-0 w-40 h-40 -mt-10 -ml-3 transition-all duration-700 bg-red-500 rounded-full blur-md ease"></span>
+                        <span className="absolute inset-0 w-full h-full transition duration-700 group-hover:rotate-180 ease">
+                          <span className="absolute bottom-0 left-0 w-24 h-24 -ml-10 bg-purple-500 rounded-full blur-md"></span>
+                          <span className="absolute bottom-0 right-0 w-24 h-24 -mr-10 bg-pink-500 rounded-full blur-md"></span>
+                        </span>
+                        <span className="relative text-white">
+                          <FontAwesomeIcon icon={faBookmark} />
+                        </span>
+                      </a>
+                    </Link>
+                    <Link href="/create-post" passHref>
+                      <a className="ml-4 mr-4 relative inline-flex items-center justify-center inline-block p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 rounded-lg shadow-2xl group">
+                        <span className="absolute top-0 left-0 w-40 h-40 -mt-10 -ml-3 transition-all duration-700 bg-red-500 rounded-full blur-md ease"></span>
+                        <span className="absolute inset-0 w-full h-full transition duration-700 group-hover:rotate-180 ease">
+                          <span className="absolute bottom-0 left-0 w-24 h-24 -ml-10 bg-purple-500 rounded-full blur-md"></span>
+                          <span className="absolute bottom-0 right-0 w-24 h-24 -mr-10 bg-pink-500 rounded-full blur-md"></span>
+                        </span>
+                        <span className="relative text-white">
+                          <FontAwesomeIcon icon={faFile} />
+                        </span>
+                      </a>
+                    </Link>
+
+                    <div
+                      onClick={signOut}
+                      className="relative inline-flex items-center justify-center px-6 py-3 overflow-hidden font-bold text-white rounded-md shadow-2xl group">
+                      <span className="absolute inset-0 w-full h-full transition duration-300 ease-out opacity-0 bg-gradient-to-br from-pink-600 via-purple-700 to-blue-400 group-hover:opacity-100"></span>
+                      {/* <!-- Top glass gradient --> */}
+                      <span className="absolute top-0 left-0 w-full bg-gradient-to-b from-white to-transparent opacity-5 h-1/3"></span>
+                      {/* <!-- Bottom gradient --> */}
+                      <span className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-white to-transparent opacity-5"></span>
+                      {/* <!-- Left gradient --> */}
+                      <span className="absolute bottom-0 left-0 w-4 h-full bg-gradient-to-r from-white to-transparent opacity-5"></span>
+                      {/* <!-- Right gradient --> */}
+                      <span className="absolute bottom-0 right-0 w-4 h-full bg-gradient-to-l from-white to-transparent opacity-5"></span>
+                      <span className="absolute inset-0 w-full h-full border border-white rounded-md opacity-10"></span>
+                      <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-5"></span>
+                      <span className="relative">
+                        <FontAwesomeIcon icon={faSignOutAlt} />
+                      </span>
+                    </div>
+                  </>
+                )}
+
+                {!user && (
+                  <Link href="/auth-user" passHref>
+                    <a className="px-8 py-2 text-xl font-semibold text-center text-white transition duration-300 rounded-lg hover:from-purple-600 hover:to-pink-600 ease bg-gradient-to-br from-purple-500 to-pink-500 md:w-auto">
+                      Signin/up
+                    </a>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

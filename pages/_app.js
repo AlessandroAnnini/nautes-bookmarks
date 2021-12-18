@@ -23,8 +23,10 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Provider value={supabase}>
-      <Header />
-      <Component {...pageProps} />
+      <Header user={user} />
+      <div className="container mx-auto px-8 py-4 pb-24">
+        <Component {...pageProps} user={user} />
+      </div>
     </Provider>
   );
 }
