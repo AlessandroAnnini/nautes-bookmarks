@@ -1,20 +1,22 @@
 import { useState } from 'react';
-// import { v4 as uuid } from 'uuid';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+
+import { Select } from '@/components/index';
 import { supabase } from '@/utils/supabaseClient';
+import { myTags } from '@/utils/tags';
 import 'easymde/dist/easymde.min.css';
 
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
 });
 
-const initialState = { title: '', content: '' };
+const initialState = { title: '', content: '', tags: [] };
 
 function CreatePost() {
   const router = useRouter();
   const [post, setPost] = useState(initialState);
-  const { title, content } = post;
+  const { title, content, tags } = post;
 
   function onChange(e) {
     setPost(() => ({ ...post, [e.target.name]: e.target.value }));
@@ -22,6 +24,9 @@ function CreatePost() {
 
   async function createNewPost() {
     if (!title || !content) return;
+
+    console.log({ tags });
+    return;
 
     const user = supabase.auth.user();
 
@@ -31,14 +36,12 @@ function CreatePost() {
       .filter('id', 'eq', user.id)
       .single();
 
-    // const id = uuid();
-    // post.id = id;
-
     const { data } = await supabase
       .from('posts')
       .insert([
         {
           title,
+          tags,
           content,
           user_id: user.id,
           author_name: profile.name,
@@ -62,11 +65,18 @@ function CreatePost() {
         value={post.title}
         className="border-b pb-2 text-lg my-4 focus:outline-none w-full font-light text-gray-500 placeholder-gray-500 y-2"
       />
+      <Select
+        name="tags"
+        options={myTags}
+        selected={post.tags}
+        setSelected={onChange}
+      />
       <SimpleMDE
         value={post.content}
         onChange={(value) => setPost({ ...post, content: value })}
       />
       <button
+        disabled={!title || !content}
         onClick={createNewPost}
         className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-indigo-100 border border-indigo-500 rounded-lg shadow-sm cursor-pointer hover:text-white bg-gradient-to-br from-purple-500 via-indigo-500 to-indigo-500">
         <svg
