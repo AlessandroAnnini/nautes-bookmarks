@@ -4,19 +4,19 @@ import dynamic from 'next/dynamic';
 
 import { Select } from '@/components/index';
 import { supabase } from '@/utils/supabaseClient';
-import { myTags } from '@/utils/tags';
+import { tags } from '@/utils/tags';
 import 'easymde/dist/easymde.min.css';
 
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
 });
 
-const initialState = { title: '', content: '', tags: [] };
+const initialState = { title: '', content: '', tag: '' };
 
 function CreatePost() {
   const router = useRouter();
   const [post, setPost] = useState(initialState);
-  const { title, content, tags } = post;
+  const { title, content, tag } = post;
 
   function onChange(e) {
     setPost(() => ({ ...post, [e.target.name]: e.target.value }));
@@ -24,9 +24,6 @@ function CreatePost() {
 
   async function createNewPost() {
     if (!title || !content) return;
-
-    console.log({ tags });
-    return;
 
     const user = supabase.auth.user();
 
@@ -41,7 +38,7 @@ function CreatePost() {
       .insert([
         {
           title,
-          tags,
+          tag,
           content,
           user_id: user.id,
           author_name: profile.name,
@@ -66,9 +63,10 @@ function CreatePost() {
         className="border-b pb-2 text-lg my-4 focus:outline-none w-full font-light text-gray-500 placeholder-gray-500 y-2"
       />
       <Select
-        name="tags"
-        options={myTags}
-        selected={post.tags}
+        className="max-w-sm py-6"
+        name="tag"
+        options={tags}
+        selected={post.tag}
         setSelected={onChange}
       />
       <SimpleMDE

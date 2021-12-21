@@ -1,28 +1,34 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { Select } from '@/components/index';
 import { supabase } from '@/utils/supabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl } from '@fortawesome/free-solid-svg-icons';
+import { tags } from '@/utils/tags';
 
 const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
 
+const myTags = [{ value: '', label: 'all' }, ...tags];
+
 export default function Home({ user }) {
   const [posts, setPosts] = useState([]);
+  const [tag, setTag] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPosts() {
-      const { data, error } = await supabase.from('posts').select();
+      const { data, error } = tag
+        ? await supabase.from('posts').select().eq('tag', tag)
+        : await supabase.from('posts').select();
       setPosts(data.reverse());
       setLoading(false);
     }
 
     fetchPosts();
-  }, []);
+  }, [tag]);
 
   if (loading) return <p className="text-2xl">Loading ...</p>;
-  if (!posts.length) return <p className="text-2xl">No posts.</p>;
 
   return (
     <div>
@@ -45,18 +51,29 @@ export default function Home({ user }) {
           </a>
         </Link>
       )}
-      {posts.map((post) => (
-        <Link
-          key={post.id}
-          href={`/${post.type === 'content' ? 'posts' : 'bookmarks'}/${
-            post.id
-          }`}>
-          <a className="block border-b border-gray-300	mt-8 pb-4">
-            <h2 className="text-xl font-semibold">{post.title}</h2>
-            <p className="text-gray-500 mt-2">Author: {post.author_name}</p>
-          </a>
-        </Link>
-      ))}
+      <Select
+        className="max-w-sm py-6"
+        name="tag"
+        options={myTags}
+        selected={tag}
+        setSelected={(e) => setTag(e.target.value)}
+      />
+      {posts.length ? (
+        posts.map((post) => (
+          <Link
+            key={post.id}
+            href={`/${post.type === 'content' ? 'posts' : 'bookmarks'}/${
+              post.id
+            }`}>
+            <a className="block border-b border-gray-300	mt-8 pb-4">
+              <h2 className="text-xl font-semibold">{post.title}</h2>
+              <p className="text-gray-500 mt-2">Author: {post.author_name}</p>
+            </a>
+          </Link>
+        ))
+      ) : (
+        <p className="text-2xl">No posts.</p>
+      )}
     </div>
   );
 }
