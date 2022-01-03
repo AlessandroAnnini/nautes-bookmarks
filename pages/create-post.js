@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
-import { Select } from '@/components/index';
+import { Select } from '@/components';
 import { supabase } from '@/utils/supabaseClient';
 import { tags } from '@/utils/tags';
 import 'easymde/dist/easymde.min.css';

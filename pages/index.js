@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Select } from '@/components/index';
-import { supabase } from '@/utils/supabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl } from '@fortawesome/free-solid-svg-icons';
+import { Select } from '@/components/atoms';
+import { supabase } from '@/utils/supabaseClient';
 import { tags } from '@/utils/tags';
 
 const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
