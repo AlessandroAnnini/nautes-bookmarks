@@ -26,8 +26,8 @@ export default function Post({ post }) {
 export async function getStaticPaths() {
   const { data, error } = await supabase.from('posts').select('id');
 
-  const paths = data.map((post) => ({
-    params: { id: JSON.stringify(post.id) },
+  const paths = data.map((id) => ({
+    params: { id: id.toString() },
   }));
 
   return {
@@ -39,15 +39,13 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { id } = params;
 
-  const { data } = await supabase
+  const { data: post } = await supabase
     .from('posts')
     .select()
     .filter('id', 'eq', id)
     .single();
 
   return {
-    props: {
-      post: data,
-    },
+    props: { post },
   };
 }

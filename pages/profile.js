@@ -18,15 +18,13 @@ const Profile = () => {
         .eq('id', nextUser.id)
         .single();
 
+      if (!nextUser || !data) {
+        router.push('/auth');
+        return;
+      }
+
       setUser(nextUser);
       setProfile(data);
-
-      // console.log('profileData: ', profileData);
-      // if (!profileData) {
-      //   router.push('/sign-in');
-      // } else {
-      //   setProfile(profileData);
-      // }
     };
 
     fetchProfile();
