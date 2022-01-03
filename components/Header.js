@@ -118,7 +118,7 @@ export const Header = ({ user }) => {
                 )}
 
                 {!user && (
-                  <Link href="/auth-user" passHref>
+                  <Link href="/auth" passHref>
                     <a className="px-8 py-2 text-xl font-semibold text-center text-white transition duration-300 rounded-lg hover:from-purple-600 hover:to-pink-600 ease bg-gradient-to-br from-purple-500 to-pink-500 md:w-auto">
                       Signin/up
                     </a>
