@@ -18,7 +18,7 @@ const getMetadata = async (req, res) => {
   const { targetUrl } = JSON.parse(req.body);
   const { body: html, url } = await got(targetUrl);
   const metadata = await metascraper({ html, url });
-  console.log({ metadata });
+  // console.log({ metadata });
   res.json(metadata);
 };
 

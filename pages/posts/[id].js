@@ -9,7 +9,6 @@ export default function Post({ post }) {
     return <div>Loading...</div>;
   }
 
-  console.log({ post });
   return (
     <div>
       <h1 className="text-5xl mt-4 font-semibold tracking-wide">
