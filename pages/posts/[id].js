@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import { supabase } from '@/utils/supabaseClient';
