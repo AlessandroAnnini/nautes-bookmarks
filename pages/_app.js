@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Provider } from 'react-supabase';
-import { Header } from '@/components/Header';
+import { Header } from '@/components';
 import { supabase } from '@/utils/supabaseClient';
 import '../styles/globals.css';
 
