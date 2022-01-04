@@ -29,7 +29,7 @@ export async function getStaticPaths() {
     .select('id')
     .eq('type', 'content');
 
-  const paths = data.map((id) => ({
+  const paths = data.map(({ id }) => ({
     params: { id: id.toString() },
   }));
 

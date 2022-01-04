@@ -123,8 +123,8 @@ export async function getStaticPaths() {
     .select('id')
     .eq('type', 'bookmark');
 
-  const paths = data.map((post) => ({
-    params: { id: JSON.stringify(post.id) },
+  const paths = data.map(({ id }) => ({
+    params: { id: id.toString() },
   }));
 
   return {
