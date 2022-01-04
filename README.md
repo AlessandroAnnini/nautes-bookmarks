@@ -1,10 +1,12 @@
 # Simple share
 
-A simple board where anybody can register and publish links or post.
-When publishing a link the metadata are automatically scraped from source.
+A simple and customisable knowledge sharing system.
+When publishing a link the open graph metadata are automatically scraped from source.
 When publishing a post the use can use markdown.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAlessandroAnnini%2Fsimple-share&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_WEBSITE_NAME,NEXT_PUBLIC_TAGS_PIPE_SEPARATED&envDescription=Supabase%20API%20is%20secured%20behind%20an%20API%20gateway%20which%20requires%20an%20API%20Key%20for%20every%20request.&envLink=https%3A%2F%2Fapp.supabase.io%2Fproject%2F%3Cyour-project-ID%3E%2Fsettings%2Fapi)
+
+[DEMO](https://simple-sharing.vercel.app/)
 
 This uses [Supabase](https://supabase.com/) - the open source Firebase alternative
 
