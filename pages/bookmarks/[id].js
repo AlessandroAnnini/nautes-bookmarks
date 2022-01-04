@@ -118,7 +118,10 @@ export default function Post({ post }) {
 }
 
 export async function getStaticPaths() {
-  const { data, error } = await supabase.from('posts').select('id');
+  const { data, error } = await supabase
+    .from('posts')
+    .select('id')
+    .eq('type', 'bookmark');
 
   const paths = data.map((post) => ({
     params: { id: JSON.stringify(post.id) },
