@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { ButtonRotate, ButtonBlue } from './atoms';
 
 const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
-console.log({ websiteName });
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -100,18 +99,18 @@ export const Header = ({ user }) => {
                 {user && (
                   <>
                     <Link href="/create-bookmark" passHref>
-                      <ButtonRotate>
+                      <ButtonRotate tooltip="create bookmark">
                         <FontAwesomeIcon icon={faBookmark} />
                       </ButtonRotate>
                     </Link>
                     <div className="w-2" />
                     <Link href="/create-post" passHref>
-                      <ButtonRotate>
+                      <ButtonRotate tooltip="create post">
                         <FontAwesomeIcon icon={faFile} />
                       </ButtonRotate>
                     </Link>
                     <div className="w-4" />
-                    <ButtonBlue onClick={signOut}>
+                    <ButtonBlue onClick={signOut} tooltip="sign out">
                       <FontAwesomeIcon icon={faSignOutAlt} />
                     </ButtonBlue>
                   </>
