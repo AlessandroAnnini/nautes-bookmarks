@@ -20,7 +20,7 @@ export default function AuthBasic() {
     <div className="container mx-auto max-w-sm py-12">
       <Auth.UserContextProvider supabaseClient={supabase}>
         <Container supabaseClient={supabase}>
-          <Auth supabaseClient={supabase} providers={['github']} />
+          <Auth supabaseClient={supabase} />
         </Container>
       </Auth.UserContextProvider>
     </div>
