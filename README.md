@@ -1,4 +1,14 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAlessandroAnnini%2Fsimple-share&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_WEBSITE_NAME)
+# Simple share
+
+A simple board where anybody can register and publish links or post.
+When publishing a link the metadata are automatically scraped from source.
+When publishing a post the use can use markdown.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAlessandroAnnini%2Fsimple-share&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_WEBSITE_NAME,NEXT_PUBLIC_TAGS_PIPE_SEPARATED&envDescription=Supabase%20API%20is%20secured%20behind%20an%20API%20gateway%20which%20requires%20an%20API%20Key%20for%20every%20request.&envLink=https%3A%2F%2Fapp.supabase.io%2Fproject%2F%3Cyour-project-ID%3E%2Fsettings%2Fapi)
+
+![Next.js](./next.png 'Next.js')
+
+![Supabase](./supabase.png 'Supabase')
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -20,21 +30,6 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
 ## Supabase scaffolding query
 
 ```sql
@@ -51,6 +46,8 @@ create table profiles (
 );
 
 alter table profiles enable row level security;
+
+--Create profiles table policies
 
 create policy "Public profiles are viewable by everyone."
   on profiles for select
@@ -71,11 +68,16 @@ CREATE TABLE posts (
   title text,
   content text,
   type text,
+  author_name text,
+  metadata json,
+  tag text,
   inserted_at timestamp with time zone,
   updated_at timestamp with time zone
 );
 
 alter table posts enable row level security;
+
+--Create posts table policies
 
 create policy "Users can create posts." on posts for
     insert with check (auth.uid() = user_id);
