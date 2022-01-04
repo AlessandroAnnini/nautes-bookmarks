@@ -10,13 +10,24 @@ This uses [Supabase](https://supabase.com/) - the open source Firebase alternati
 
 and [Next.js](https://nextjs.org/) - the React framework for production.
 
-![Next.js](./next.png 'Next.js')
-
 ![Supabase](./supabase.png 'Supabase')
+![Next.js](./next.png 'Next.js')
+![Tailwindcss](./tailwindcss.png 'Tailwindcss')
 
 ## Getting Started
 
-First, run the development server:
+Make a `.env` file like this:
+
+```text
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_WEBSITE_NAME=Your site name
+NEXT_PUBLIC_TAGS_PIPE_SEPARATED=tag1|tag2|tag3
+```
+
+You can get `SUPABASE_URL` and `SUPABASE_ANON_KEY` from Supabase project API keys page at this url: `https://app.supabase.io/project/<your-project-id>/settings/api`
+
+then, run the development server:
 
 ```bash
 npm run dev
