@@ -12,22 +12,30 @@ const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
 
 const myTags = [{ value: '', label: 'all' }, ...tags];
 
-export default function Home({ user }) {
-  const [posts, setPosts] = useState([]);
+export default function Home({ user, posts }) {
+  // const [posts, setPosts] = useState([]);
+  const [displayedPosts, setDisplayedPosts] = useState(posts);
   const [tag, setTag] = useState('');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchPosts() {
-      const { data, error } = tag
-        ? await supabase.from('posts').select().eq('tag', tag)
-        : await supabase.from('posts').select();
-      setPosts(data.reverse());
-      setLoading(false);
-    }
+  console.log({ user });
 
-    fetchPosts();
-  }, [tag]);
+  useEffect(() => {
+    const nextDisplayedPosts =
+      tag === '' ? posts : posts.filter((p) => p.tag === tag);
+
+    setDisplayedPosts(nextDisplayedPosts);
+
+    // async function fetchPosts() {
+    //   const { data, error } = tag
+    //     ? await supabase.from('posts').select().eq('tag', tag)
+    //     : await supabase.from('posts').select();
+    //   setPosts(data.reverse());
+    //   setLoading(false);
+    // }
+
+    // fetchPosts();
+  }, [posts, tag]);
 
   if (loading) return <p className="text-2xl">Loading ...</p>;
 
@@ -62,9 +70,10 @@ export default function Home({ user }) {
         setSelected={(e) => setTag(e.target.value)}
       />
 
-      {posts.length ? (
-        posts.map((post) => (
+      {displayedPosts.length ? (
+        displayedPosts.map((post) => (
           <Link
+            passHref
             key={post.id}
             href={`/${post.type === 'content' ? 'posts' : 'bookmarks'}/${
               post.id
@@ -82,4 +91,12 @@ export default function Home({ user }) {
       )}
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const { data: posts, error } = await supabase.from('posts').select();
+
+  return {
+    props: { posts },
+  };
 }
