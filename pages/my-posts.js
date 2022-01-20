@@ -5,20 +5,21 @@ import { supabase } from '@/utils/supabaseClient';
 export default function MyPosts() {
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
   async function fetchPosts() {
     const user = supabase.auth.user();
 
     const { data } = await supabase
       .from('posts')
       .select('*')
-      .filter('user_id', 'eq', user.id);
+      .filter('user_id', 'eq', user.id)
+      .order('inserted_at', { ascending: false });
 
-    setPosts(data.reverse());
+    setPosts(data);
   }
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   async function deletePost(id) {
     await supabase.from('posts').delete().match({ id });
