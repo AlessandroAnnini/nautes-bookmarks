@@ -71,7 +71,9 @@ export default function Home({ user }) {
             }`}>
             <a className="block border-b border-gray-300	mt-8 pb-4">
               <h2 className="text-xl font-semibold">{post.title}</h2>
-              <p className="text-gray-500 mt-2">Author: {post.author_name}</p>
+              <p className="text-gray-500 mt-2">
+                Tag: {post.tag} - Author: {post.author_name}
+              </p>
             </a>
           </Link>
         ))
