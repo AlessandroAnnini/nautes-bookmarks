@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { ButtonBlack, ButtonPurple } from '@/components';
+import { Select, ButtonBlack, ButtonPurple } from '@/components';
 import { supabase } from '@/utils/supabaseClient';
+import { tags } from '@/utils/tags';
 
 function CreatePost() {
   const router = useRouter();
+  const [tag, setTag] = useState('');
   const [url, setUrl] = useState('');
   const [metadata, setMetadata] = useState(null);
 
   async function createNewBookmark() {
-    if (!metadata) return;
+    if (!metadata || !tag) return;
 
     const user = supabase.auth.user();
 
@@ -26,6 +28,7 @@ function CreatePost() {
       .insert([
         {
           title,
+          tag,
           content,
           user_id: user.id,
           author_name: profile.name,
@@ -54,6 +57,15 @@ function CreatePost() {
       <h1 className="text-3xl font-semibold tracking-wide mt-6">
         Create new bookmark
       </h1>
+
+      <Select
+        className="max-w-sm py-6"
+        name="tag"
+        options={tags}
+        selected={tag}
+        setSelected={(e) => setTag(e.target.value)}
+      />
+
       <input
         onChange={(e) => setUrl(e.target.value)}
         name="url"
