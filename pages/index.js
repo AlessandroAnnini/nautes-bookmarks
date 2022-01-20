@@ -12,32 +12,37 @@ const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
 
 const myTags = [{ value: '', label: 'all' }, ...tags];
 
-export default function Home({ user }) {
-  const [posts, setPosts] = useState([]);
+export default function Home({ user, posts }) {
+  // const [posts, setPosts] = useState([]);
+  const [displayedPosts, setDisplayedPosts] = useState([]);
   const [tag, setTag] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchPosts() {
-      const { data, error } = tag
-        ? await supabase
-            .from('posts')
-            .select()
-            .eq('tag', tag)
-            .order('inserted_at', { ascending: false })
-        : await supabase
-            .from('posts')
-            .select()
-            .order('inserted_at', { ascending: false });
+    // async function fetchPosts() {
+    //   const { data, error } = tag
+    //     ? await supabase
+    //         .from('posts')
+    //         .select()
+    //         .eq('tag', tag)
+    //         .order('inserted_at', { ascending: false })
+    //     : await supabase
+    //         .from('posts')
+    //         .select()
+    //         .order('inserted_at', { ascending: false });
 
-      setPosts(data);
-      setLoading(false);
-    }
+    //   setPosts(data);
+    //   setLoading(false);
+    // }
 
-    fetchPosts();
-  }, [tag]);
+    // fetchPosts();
 
-  if (loading) return <p className="text-2xl">Loading ...</p>;
+    const nextDisplayedPosts =
+      tag === '' ? posts : posts.filter((p) => p.tag === tag);
+    setDisplayedPosts(nextDisplayedPosts);
+  }, [posts, tag]);
+
+  // if (loading) return <p className="text-2xl">Loading ...</p>;
 
   return (
     <div>
@@ -70,8 +75,8 @@ export default function Home({ user }) {
         setSelected={(e) => setTag(e.target.value)}
       />
 
-      {posts.length ? (
-        posts.map((post) => (
+      {displayedPosts.length ? (
+        displayedPosts.map((post) => (
           <Link
             key={post.id}
             href={`/${post.type === 'content' ? 'posts' : 'bookmarks'}/${
@@ -90,4 +95,14 @@ export default function Home({ user }) {
       )}
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const { data: posts } = await supabase
+    .from('posts')
+    .select()
+    .order('inserted_at', { ascending: false });
+
+  // Pass data to the page via props
+  return { props: { posts } };
 }
