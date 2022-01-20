@@ -13,36 +13,17 @@ const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
 const myTags = [{ value: '', label: 'all' }, ...tags];
 
 export default function Home({ user, posts }) {
-  // const [posts, setPosts] = useState([]);
   const [displayedPosts, setDisplayedPosts] = useState([]);
   const [tag, setTag] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // async function fetchPosts() {
-    //   const { data, error } = tag
-    //     ? await supabase
-    //         .from('posts')
-    //         .select()
-    //         .eq('tag', tag)
-    //         .order('inserted_at', { ascending: false })
-    //     : await supabase
-    //         .from('posts')
-    //         .select()
-    //         .order('inserted_at', { ascending: false });
-
-    //   setPosts(data);
-    //   setLoading(false);
-    // }
-
-    // fetchPosts();
-
     const nextDisplayedPosts =
       tag === '' ? posts : posts.filter((p) => p.tag === tag);
     setDisplayedPosts(nextDisplayedPosts);
   }, [posts, tag]);
 
-  // if (loading) return <p className="text-2xl">Loading ...</p>;
+  if (loading) return <p className="text-2xl">Loading ...</p>;
 
   return (
     <div>
@@ -103,6 +84,5 @@ export async function getServerSideProps() {
     .select()
     .order('inserted_at', { ascending: false });
 
-  // Pass data to the page via props
   return { props: { posts } };
 }
