@@ -12,19 +12,32 @@ const websiteName = process.env.NEXT_PUBLIC_WEBSITE_NAME;
 
 const myTags = [{ value: '', label: 'all' }, ...tags];
 
-export default function Home({ user, posts }) {
-  const [displayedPosts, setDisplayedPosts] = useState(posts);
+export default function Home({ user }) {
+  const [posts, setPosts] = useState([]);
   const [tag, setTag] = useState('');
-
-  console.log({ posts });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const nextDisplayedPosts =
-      tag === '' ? posts : posts.filter((p) => p.tag === tag);
+    async function fetchPosts() {
+      const { data, error } = tag
+        ? await supabase
+            .from('posts')
+            .select()
+            .eq('tag', tag)
+            .order('inserted_at', { ascending: false })
+        : await supabase
+            .from('posts')
+            .select()
+            .order('inserted_at', { ascending: false });
 
-    console.log({ nextDisplayedPosts });
-    setDisplayedPosts(nextDisplayedPosts.reverse());
-  }, [posts, tag]);
+      setPosts(data);
+      setLoading(false);
+    }
+
+    fetchPosts();
+  }, [tag]);
+
+  if (loading) return <p className="text-2xl">Loading ...</p>;
 
   return (
     <div>
@@ -57,10 +70,9 @@ export default function Home({ user, posts }) {
         setSelected={(e) => setTag(e.target.value)}
       />
 
-      {displayedPosts.length ? (
-        displayedPosts.map((post) => (
+      {posts.length ? (
+        posts.map((post) => (
           <Link
-            passHref
             key={post.id}
             href={`/${post.type === 'content' ? 'posts' : 'bookmarks'}/${
               post.id
@@ -78,15 +90,4 @@ export default function Home({ user, posts }) {
       )}
     </div>
   );
-}
-
-export async function getStaticProps() {
-  const { data: posts } = await supabase
-    .from('posts')
-    .select()
-    .order('inserted_at', { ascending: false });
-
-  return {
-    props: { posts },
-  };
 }
