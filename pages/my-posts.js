@@ -4,8 +4,10 @@ import { supabase } from '@/utils/supabaseClient';
 
 export default function MyPosts() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   async function fetchPosts() {
+    setLoading(true);
     const user = supabase.auth.user();
 
     const { data } = await supabase
@@ -15,6 +17,7 @@ export default function MyPosts() {
       .order('inserted_at', { ascending: false });
 
     setPosts(data);
+    setLoading(false);
   }
 
   useEffect(() => {

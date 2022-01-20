@@ -21,6 +21,7 @@ export default function Home({ user, posts }) {
     const nextDisplayedPosts =
       tag === '' ? posts : posts.filter((p) => p.tag === tag);
     setDisplayedPosts(nextDisplayedPosts);
+    setLoading(false);
   }, [posts, tag]);
 
   if (loading) return <p className="text-2xl">Loading ...</p>;
